@@ -145,7 +145,7 @@ class Mentionify {
     this.ref.addEventListener('input', this.onInput);
     this.ref.addEventListener('keydown', this.onKeyDown);
     this.ref.addEventListener('click', this.onClick);
-    this.closeMenu();
+    // this.closeMenu();
   }
   ref: any;
   menuRef: any;
@@ -231,9 +231,16 @@ class Mentionify {
       return;
     }
     // console.log(triggerIdx + 1);
-    if (maybeTrigger2 === '@') {
+    // console.log('may be trigger 2 ' + maybeTrigger2);
+    if (maybeTrigger2 === '@' && maybeTrigger === '@') {
+      this.triggerIdx = triggerIdx;
+      this.query = textBeforeCaret.slice(triggerIdx + 1);
+    } else if (maybeTrigger2 === '@') {
       this.triggerIdx = triggerIdx2;
       this.query = textBeforeCaret.slice(triggerIdx2 + 1);
+      // console.log('query index ' + this.query.substring(this.query.indexOf('@') + 1));
+      // console.log('query ' + this.query + 'triggerindx 2 ' + triggerIdx2 + 'triggeridx1 ' + triggerIdx);
+      // this.query = this.query.substring(this.query.indexOf('@') + 1);
     } else {
       this.triggerIdx = triggerIdx;
       this.query = textBeforeCaret.slice(triggerIdx + 1);
