@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, Inject } from '@angular/core';
-import{FormsModule, ReactiveFormsModule, FormGroup, FormControl} from '@angular/forms'
+import{FormsModule, ReactiveFormsModule, FormGroup, FormControl} from '@angular/forms';
 import Tribute from 'tributejs';
-import { DOCUMENT } from '@angular/common'; 
+import { DOCUMENT } from '@angular/common';
 
 
 
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
       resolveFn,
       replaceFn,
       menuItemFn
-    )
+    );
   }
   properties = [
     'direction',
@@ -27,18 +27,18 @@ export class AppComponent implements OnInit {
     'height',
     'overflowX',
     'overflowY',
-  
+
     'borderTopWidth',
     'borderRightWidth',
     'borderBottomWidth',
     'borderLeftWidth',
     'borderStyle',
-  
+
     'paddingTop',
     'paddingRight',
     'paddingBottom',
     'paddingLeft',
-  
+
     'fontStyle',
     'fontVariant',
     'fontWeight',
@@ -47,64 +47,69 @@ export class AppComponent implements OnInit {
     'fontSizeAdjust',
     'lineHeight',
     'fontFamily',
-  
+
     'textAlign',
     'textTransform',
     'textIndent',
     'textDecoration',
-  
+
     'letterSpacing',
     'wordSpacing',
-  
+
     'tabSize',
     'MozTabSize',
-  ]
-  
-   isFirefox = typeof window !== 'undefined' && window['mozInnerScreenX'] != null
-  
+  ];
+
+   isFirefox = typeof window !== 'undefined' && window['mozInnerScreenX'] != null;
+
   /**
    * @param {HTMLTextAreaElement} element
    * @param {number} position
    */
   getCaretCoordinates(element, position) {
+    // console.log('posiiton' + position);
     const div = document.createElement('div');
     document.body.appendChild(div);
-  
+
     const style = div.style;
     const computed = getComputedStyle(element);
-  
+
     style.whiteSpace = 'pre-wrap';
     style.wordWrap = 'break-word';
     style.position = 'absolute';
     style.visibility = 'hidden';
-  
+
     this.properties.forEach(prop => {
       style[prop] = computed[prop];
-    })
-  
+    });
+
     if (this.isFirefox) {
-      if (element.scrollHeight > parseInt(computed.height))
-        style.overflowY = 'scroll'
+      if (element.scrollHeight > parseInt(computed.height)) {
+        style.overflowY = 'scroll';
+      }
     } else {
       style.overflow = 'hidden';
     }
-  
+
     div.textContent = element.value.substring(0, position);
-  
+
     const span = document.createElement('span');
-    span.textContent = element.value.substring(position) || '.'
+    span.textContent = element.value.substring(position) || '.';
     div.appendChild(span);
-  
+    console.log('span ' + span.offsetHeight);
+
     const coordinates = {
       top: span.offsetTop + parseInt(computed['borderTopWidth']),
       left: span.offsetLeft + parseInt(computed['borderLeftWidth']),
       // height: parseInt(computed['lineHeight'])
       height: span.offsetHeight
-    }
-  
-    div.remove()
-  
-    return coordinates
+    };
+
+    // console.log('coord top ' + coordinates.top + 'coord left ' + coordinates.left);
+
+    div.remove();
+
+    return coordinates;
   }
 }
 
@@ -114,22 +119,22 @@ export class AppComponent implements OnInit {
 
 class Mentionify {
   constructor(ref, menuRef, resolveFn, replaceFn, menuItemFn) {
-    this.ref = ref
-    this.menuRef = menuRef
-    this.resolveFn = resolveFn
-    this.replaceFn = replaceFn
-    this.menuItemFn = menuItemFn
-    this.options = []
-    
-    this.makeOptions = this.makeOptions.bind(this)
-    this.closeMenu = this.closeMenu.bind(this)
-    this.selectItem = this.selectItem.bind(this)
-    this.onInput = this.onInput.bind(this)
-    this.onKeyDown = this.onKeyDown.bind(this)
-    this.renderMenu = this.renderMenu.bind(this)
-    
-    this.ref.addEventListener('input', this.onInput)
-    this.ref.addEventListener('keydown', this.onKeyDown)
+    this.ref = ref;
+    this.menuRef = menuRef;
+    this.resolveFn = resolveFn;
+    this.replaceFn = replaceFn;
+    this.menuItemFn = menuItemFn;
+    this.options = [];
+
+    this.makeOptions = this.makeOptions.bind(this);
+    this.closeMenu = this.closeMenu.bind(this);
+    this.selectItem = this.selectItem.bind(this);
+    this.onInput = this.onInput.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.renderMenu = this.renderMenu.bind(this);
+
+    this.ref.addEventListener('input', this.onInput);
+    this.ref.addEventListener('keydown', this.onKeyDown);
   }
   ref: any;
   menuRef: any;
@@ -142,44 +147,45 @@ class Mentionify {
   triggerIdx: any;
   active: number;
   query: any;
-  
+
   async makeOptions(query) {
-    const options = await this.resolveFn(query)
+    const options = await this.resolveFn(query);
     if (options.lenght !== 0) {
-      this.options = options
-      this.renderMenu()
+      this.options = options;
+      this.renderMenu();
     } else {
-      this.closeMenu()
+      this.closeMenu();
     }
   }
-  
+
   closeMenu() {
     setTimeout(() => {
-      this.options = []
-      this.left = undefined
-      this.top = undefined
-      this.triggerIdx = undefined
-      this.renderMenu()
-    }, 0)
+      this.options = [];
+      this.left = undefined;
+      this.top = undefined;
+      this.triggerIdx = undefined;
+      this.renderMenu();
+    }, 0);
   }
-  
+
   selectItem(active) {
     return () => {
-      const preMention = this.ref.value.substr(0, this.triggerIdx)
-      const option = this.options[active]
-      const mention = this.replaceFn(option, this.ref.value[this.triggerIdx])
-      const postMention = this.ref.value.substr(this.ref.selectionStart)
+      const preMention = this.ref.value.substr(0, this.triggerIdx);
+      const option = this.options[active];
+      const mention = this.replaceFn(option, this.ref.value[this.triggerIdx]);
+      const postMention = this.ref.value.substr(this.ref.selectionStart);
       const newValue = `${preMention}${mention}${postMention}`;
       newValue.replace(this.query, '');
       this.ref.value = newValue;
       const caretPosition = this.ref.value.length - postMention.length;
-      this.ref.setSelectionRange(caretPosition, caretPosition)
+      this.ref.setSelectionRange(caretPosition, caretPosition);
       this.closeMenu();
       this.ref.focus();
-    }
+    };
   }
   onInput(ev) {
-    const positionIndex = this.ref.selectionStart;
+    let positionIndex = this.ref.selectionStart;
+    console.log(positionIndex + 'ref selection start');
     const textBeforeCaret = this.ref.value.slice(0, positionIndex);
     const tokens = textBeforeCaret.split(/\s/);
     const preLastToken = tokens[tokens.length - 2];
@@ -201,7 +207,7 @@ class Mentionify {
       keystrokeTriggered = maybeTrigger === '@';
     }
     // const keystrokeTriggered = maybeTrigger === '@';
- 
+
     if (!keystrokeTriggered) {
       console.log('close');
       this.closeMenu();
@@ -215,21 +221,23 @@ class Mentionify {
       this.triggerIdx = triggerIdx;
       this.query = textBeforeCaret.slice(triggerIdx + 1);
     }
-    this.makeOptions(this.query)
-    
-    let mc = new AppComponent;
-    const coords = mc.getCaretCoordinates(this.ref, positionIndex)
-    const { top, left } = this.ref.getBoundingClientRect()
-    
+    this.makeOptions(this.query);
+
+    const mc = new AppComponent();
+    positionIndex = this.triggerIdx;
+    const coords = mc.getCaretCoordinates(this.ref, positionIndex);
+    const { top, left } = this.ref.getBoundingClientRect();
+    console.log('top ' + (coords.top + top - this.ref.scrollTop) + 'left ' + (coords.left + left + this.ref.scrollLeft));
+    console.log('coords height  ' + coords.height);
     setTimeout(() => {
-      this.active = 0
+      this.active = 0;
       this.left = window.scrollX  + coords.left + left + this.ref.scrollLeft;
-      this.top = window.scrollY +  coords.top + top + coords.height - this.ref.scrollTop;
+      this.top = window.scrollY +  coords.top + top + 21 - this.ref.scrollTop;
       // this.triggerIdx = triggerIdx
-      this.renderMenu()
-    }, 0)
+      this.renderMenu();
+    }, 0);
   }
-  
+
   onKeyDown(ev) {
     let keyCaught = false;
     if (this.triggerIdx !== undefined) {
@@ -251,30 +259,30 @@ class Mentionify {
           break;
       }
     }
-    
+
     if (keyCaught) {
-      ev.preventDefault()
+      ev.preventDefault();
     }
   }
-  
-  renderMenu() {  
+
+  renderMenu() {
     if (this.top === undefined) {
       this.menuRef.hidden = true;
-      return
+      return;
     }
-    
-    this.menuRef.style.left = this.left + 'px'
-    this.menuRef.style.top = this.top + 'px'
-    this.menuRef.innerHTML = ''
-    
+    console.log('menuref left ' + this.left + 'menuref top ' + this.top);
+    this.menuRef.style.left = this.left + 'px';
+    this.menuRef.style.top = this.top + 'px';
+    this.menuRef.innerHTML = '';
+
     this.options.forEach((option, idx) => {
       this.menuRef.appendChild(this.menuItemFn(
         option,
         this.selectItem(idx),
-        this.active === idx))
-    })
-    
-    this.menuRef.hidden = false
+        this.active === idx));
+    });
+
+    this.menuRef.hidden = false;
   }
 }
 
@@ -285,7 +293,7 @@ const users = [
   { username: 'aditya nair' },
   { username: 'ankit doe' },
   { username: 'jane do' }
-]
+];
 
 const resolveFn = prefix => prefix === ''
   ? users
@@ -294,9 +302,9 @@ const resolveFn = prefix => prefix === ''
 const replaceFn = (user, trigger) =>`${trigger}${user.username}`;
 
 const menuItemFn = (user, setItem, selected) => {
-  const div = document.createElement('div')
-  div.setAttribute('role', 'option')
-  div.className = 'menu'
+  const div = document.createElement('div');
+  div.setAttribute('role', 'option');
+  div.className = 'menu';
   if (selected) {
     div.classList.add('alert-secondary');
     div.setAttribute('aria-selected', '');
@@ -306,4 +314,4 @@ const menuItemFn = (user, setItem, selected) => {
   div.onclick = setItem;
   // div.onkeypress = setItem;
   return div;
-}
+};
