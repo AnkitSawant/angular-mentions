@@ -28,6 +28,11 @@
   }
   
   .menu {
+    padding-left: 3px;
+    padding-right: 3px;
+    border-style: groove;
+    border-width: medium;
+    border-color: rgba(220, 220, 221, 0.692);
     background-color: #f3f3f3;
     position: absolute;
     cursor: pointer;
@@ -39,7 +44,7 @@
   }
   
   .menu-item.selected {
-    background-color: slateGray;
+    background-color: rgb(103, 114, 126);
     color: white;
   }
   

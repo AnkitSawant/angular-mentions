@@ -1,7 +1,5 @@
-import { Component, OnInit, OnChanges, Inject } from '@angular/core';
-import{FormsModule, ReactiveFormsModule, FormGroup, FormControl} from '@angular/forms';
-import Tribute from 'tributejs';
-import { DOCUMENT } from '@angular/common';
+import { Component, OnInit} from '@angular/core';
+
 
 
 
@@ -12,14 +10,19 @@ import { DOCUMENT } from '@angular/common';
 })
 export class AppComponent implements OnInit {
   ngOnInit(): void {
+    // tslint:disable-next-line: no-unused-expression
     new Mentionify(
       document.getElementById('textarea'),
       document.getElementById('menu'),
+      // tslint:disable-next-line: no-use-before-declare
       resolveFn,
+      // tslint:disable-next-line: no-use-before-declare
       replaceFn,
+      // tslint:disable-next-line: no-use-before-declare
       menuItemFn
     );
   }
+  // tslint:disable-next-line: member-ordering
   properties = [
     'direction',
     'boxSizing',
@@ -60,6 +63,7 @@ export class AppComponent implements OnInit {
     'MozTabSize',
   ];
 
+   // tslint:disable-next-line: member-ordering
    isFirefox = typeof window !== 'undefined' && window['mozInnerScreenX'] != null;
 
   /**
@@ -67,7 +71,7 @@ export class AppComponent implements OnInit {
    * @param {number} position
    */
   getCaretCoordinates(element, position) {
-    // console.log('posiiton' + position);
+    // // console.log('posiiton' + position);
     const div = document.createElement('div');
     document.body.appendChild(div);
 
@@ -84,6 +88,7 @@ export class AppComponent implements OnInit {
     });
 
     if (this.isFirefox) {
+      // tslint:disable-next-line: radix
       if (element.scrollHeight > parseInt(computed.height)) {
         style.overflowY = 'scroll';
       }
@@ -96,16 +101,18 @@ export class AppComponent implements OnInit {
     const span = document.createElement('span');
     span.textContent = element.value.substring(position) || '.';
     div.appendChild(span);
-    console.log('span ' + span.offsetHeight);
+    // // console.log('span ' + span.offsetHeight);
 
     const coordinates = {
+      // tslint:disable-next-line: radix
       top: span.offsetTop + parseInt(computed['borderTopWidth']),
+      // tslint:disable-next-line: radix
       left: span.offsetLeft + parseInt(computed['borderLeftWidth']),
       // height: parseInt(computed['lineHeight'])
       height: span.offsetHeight
     };
 
-    // console.log('coord top ' + coordinates.top + 'coord left ' + coordinates.left);
+    // // console.log('coord top ' + coordinates.top + 'coord left ' + coordinates.left);
 
     div.remove();
 
@@ -118,6 +125,7 @@ export class AppComponent implements OnInit {
 
 
 class Mentionify {
+  // tslint:disable-next-line: no-shadowed-variable
   constructor(ref, menuRef, resolveFn, replaceFn, menuItemFn) {
     this.ref = ref;
     this.menuRef = menuRef;
@@ -193,7 +201,7 @@ class Mentionify {
   }
   onInput(ev) {
     let positionIndex = this.ref.selectionStart;
-    console.log(positionIndex + 'ref selection start');
+    // console.log(positionIndex + 'ref selection start');
     const textBeforeCaret = this.ref.value.slice(0, positionIndex);
     const tokens = textBeforeCaret.split(/\s/);
     const preLastToken = tokens[tokens.length - 2];
@@ -201,7 +209,7 @@ class Mentionify {
     const triggerIdx = textBeforeCaret.endsWith(lastToken)
       ? textBeforeCaret.length - lastToken.length
       : -1;
-    console.log(triggerIdx);
+    // console.log(triggerIdx);
     let triggerIdx2: number;
     let maybeTrigger2;
     let keystrokeTriggered;
@@ -210,18 +218,18 @@ class Mentionify {
       triggerIdx2 = textBeforeCaret.length - lastToken.length - preLastToken.length - 1;
       maybeTrigger2 = textBeforeCaret[triggerIdx2];
       keystrokeTriggered = maybeTrigger === '@' || maybeTrigger2 === '@';
-      console.log('keystroke' + maybeTrigger2);
+      // console.log('keystroke' + maybeTrigger2);
     } else {
       keystrokeTriggered = maybeTrigger === '@';
     }
     // const keystrokeTriggered = maybeTrigger === '@';
 
     if (!keystrokeTriggered) {
-      console.log('close');
+      // console.log('close');
       this.closeMenu();
       return;
     }
-    console.log(triggerIdx + 1);
+    // console.log(triggerIdx + 1);
     if (maybeTrigger2 === '@') {
       this.triggerIdx = triggerIdx2;
       this.query = textBeforeCaret.slice(triggerIdx2 + 1);
@@ -236,8 +244,8 @@ class Mentionify {
     positionIndex = this.triggerIdx;
     const coords = mc.getCaretCoordinates(this.ref, positionIndex);
     const { top, left } = this.ref.getBoundingClientRect();
-    console.log('top ' + (coords.top + top - this.ref.scrollTop) + 'left ' + (coords.left + left + this.ref.scrollLeft));
-    console.log('coords height  ' + coords.height);
+    // console.log('top ' + (coords.top + top - this.ref.scrollTop) + 'left ' + (coords.left + left + this.ref.scrollLeft));
+    // console.log('coords height  ' + coords.height);
     setTimeout(() => {
       this.active = 0;
       this.left = window.scrollX  + coords.left + left + this.ref.scrollLeft;
@@ -279,7 +287,7 @@ class Mentionify {
       this.menuRef.hidden = true;
       return;
     }
-    console.log('menuref left ' + this.left + 'menuref top ' + this.top);
+    // console.log('menuref left ' + this.left + 'menuref top ' + this.top);
     this.menuRef.style.left = this.left + 'px';
     this.menuRef.style.top = this.top + 'px';
     this.menuRef.innerHTML = '';
@@ -315,8 +323,10 @@ const menuItemFn = (user, setItem, selected) => {
   div.setAttribute('role', 'option');
   div.className = 'menu';
   if (selected) {
-    div.classList.add('alert-secondary');
+    // div.classList.add('alert-secondary');
     div.setAttribute('aria-selected', '');
+    div.classList.add('selected');
+    div.style.backgroundColor = 'rgba(220, 220, 221, 0.692)';
 
   }
   div.textContent =  user.username;
