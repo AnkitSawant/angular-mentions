@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
 
     // // console.log('coord top ' + coordinates.top + 'coord left ' + coordinates.left);
 
-    div.remove();
+    // div.remove();
 
     return coordinates;
   }
