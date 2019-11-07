@@ -145,6 +145,7 @@ class Mentionify {
     this.ref.addEventListener('input', this.onInput);
     this.ref.addEventListener('keydown', this.onKeyDown);
     this.ref.addEventListener('click', this.onClick);
+    this.closeMenu();
   }
   ref: any;
   menuRef: any;
