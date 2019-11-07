@@ -132,9 +132,11 @@ class Mentionify {
     this.onInput = this.onInput.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
+    this.onClick = this.onClick.bind(this);
 
     this.ref.addEventListener('input', this.onInput);
     this.ref.addEventListener('keydown', this.onKeyDown);
+    this.ref.addEventListener('click', this.onClick);
   }
   ref: any;
   menuRef: any;
@@ -147,6 +149,7 @@ class Mentionify {
   triggerIdx: any;
   active: number;
   query: any;
+  clicked = false;
 
   async makeOptions(query) {
     const options = await this.resolveFn(query);
@@ -166,6 +169,11 @@ class Mentionify {
       this.triggerIdx = undefined;
       this.renderMenu();
     }, 0);
+  }
+
+  onClick() {
+    this.clicked = true;
+    this.closeMenu();
   }
 
   selectItem(active) {
@@ -198,7 +206,7 @@ class Mentionify {
     let maybeTrigger2;
     let keystrokeTriggered;
     const maybeTrigger = textBeforeCaret[triggerIdx];
-    if (preLastToken) {
+    if (preLastToken && !this.clicked) {
       triggerIdx2 = textBeforeCaret.length - lastToken.length - preLastToken.length - 1;
       maybeTrigger2 = textBeforeCaret[triggerIdx2];
       keystrokeTriggered = maybeTrigger === '@' || maybeTrigger2 === '@';
@@ -220,6 +228,7 @@ class Mentionify {
     } else {
       this.triggerIdx = triggerIdx;
       this.query = textBeforeCaret.slice(triggerIdx + 1);
+      this.clicked = false;
     }
     this.makeOptions(this.query);
 
