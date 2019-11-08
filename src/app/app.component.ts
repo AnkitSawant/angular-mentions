@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
    // tslint:disable-next-line: member-ordering
    isFirefox = typeof window !== 'undefined' && window['mozInnerScreenX'] != null;
 
-  const users = [
+  users = [
     { username: 'john doe'},
     { username: 'john kamlesh' },
     { username: 'sankit patil' },
@@ -306,13 +306,13 @@ export class AppComponent implements OnInit {
     this.menuRef.hidden = false;
   }
 
-  const resolveFn = prefix => prefix === ''
+  resolveFn = prefix => prefix === ''
     ? this.users
     : this.users.filter(user => user.username.includes(prefix));
 
-  const replaceFn = (user, trigger) =>`${trigger}${user.username}`;
+  replaceFn = (user, trigger) =>`${trigger}${user.username}`;
 
-  const menuItemFn = (user, setItem, selected) => {
+  menuItemFn = (user, setItem, selected) => {
     const div = document.createElement('div');
     div.setAttribute('role', 'option');
     div.className = 'menu';
