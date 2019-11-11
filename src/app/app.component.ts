@@ -292,8 +292,12 @@ export class AppComponent implements OnInit {
       return;
     }
     // console.log('menuref left ' + this.left + 'menuref top ' + this.top);
-    this.menuRef.style.left = this.left + 'px';
-    this.menuRef.style.top = this.top + 'px';
+    if (this.left) {
+      this.menuRef.style.left = this.left + 'px';
+    }
+    if (this.top) {
+      this.menuRef.style.top = this.top + 'px';
+    }
     this.menuRef.innerHTML = '';
 
     this.options.forEach((option, idx) => {
